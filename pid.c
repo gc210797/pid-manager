@@ -16,7 +16,7 @@ static unsigned int last_set_bit;
 
 int allocate_map()
 {
-	int m_size = (MAX_PID - MIN_PID) / sizeof *map;
+	int m_size = ((MAX_PID - MIN_PID) + 1) / sizeof *map;
 	map = calloc(m_size, sizeof *map);
 	if(!map)
 		return 0;
@@ -36,10 +36,7 @@ int allocate_pid()
 {
 	int bit;
 	int arr_index;
-	unsigned int shift;
-
-	if(last_set_bit == (MAX_PID - MIN_PID) + 1)
-		return 1;
+	int shift;
 	
 	bit = last_set_bit + 1;
 
@@ -54,11 +51,42 @@ int allocate_pid()
 		free(t);
 		cache->pid_bit--;
 	}
+
+	if(bit == (MAX_PID - MIN_PID) + 1)
+		return 1;
 	
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
-	map[arr_index] |= ((unsigned int)1 << shift);
+	map[arr_index] |= (1 << shift);
 	last_set_bit = bit;
 
 	return MIN_PID + bit;
+}
+
+void release_pid(int pid)
+{
+	int bit;
+	int arr_index;
+	int shift;
+	struct pid_cache *new_entry;
+
+	bit = pid - MIN_PID;
+	
+	arr_index = bit / sizeof *map;
+	shift = bit % sizeof *map;
+	map[arr_index] &= ~(1 << shift);
+
+	new_entry = malloc(sizeof *new_entry);
+	new_entry->pid_bit = bit;
+	new_entry->next = cache->next;
+	cache->next = new_entry;
+	cache->pid_bit++;
+}
+
+void deallocate_map()
+{
+	void *p, *t;
+
+	for(p = cache; p != NULL; t = p, p = p->next, free(t));
+	free(map);
 }
