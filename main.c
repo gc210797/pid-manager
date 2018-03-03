@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 		printf("Continuing with default values\n");
 	}
 
-	printf("%s %s\n", argv[1], argv[2]);
+	//printf("%s %s\n", argv[1], argv[2]);
 
 	for(i = 0; i < no_thread; i++)
 		process_new();
