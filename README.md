@@ -1,5 +1,10 @@
 pid manager
 
+To install: make
+To run for debugger: make debug
+Remove source files: make clean
+To Uninstall: make uninstall
+
 it accepts two arguments -s, -t
 -s will give maximum sleep for seconds, -t gives number of threads.
 Example:
