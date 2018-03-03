@@ -54,10 +54,15 @@ int allocate_pid()
 		cache->pid_bit--;
 	}
 
+<<<<<<< HEAD
 	if(bit == (MAX_PID - MIN_PID) + 1) {
 		printf("Pid cannot be allocated wait for other process to exit\n");
 		return 1;
 	}
+=======
+	if(bit == (MAX_PID - MIN_PID) + 1)
+		return 1;
+>>>>>>> 436dcf09ff636cf1c3fec852a0caaecc5e975df5
 	
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
@@ -89,7 +94,11 @@ void release_pid(int pid)
 
 void deallocate_map()
 {
+<<<<<<< HEAD
 	struct pid_cache *p, *t;
+=======
+	void *p, *t;
+>>>>>>> 436dcf09ff636cf1c3fec852a0caaecc5e975df5
 
 	for(p = cache; p != NULL; t = p, p = p->next, free(t));
 	free(map);
