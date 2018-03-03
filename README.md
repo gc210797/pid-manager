@@ -5,7 +5,7 @@
 <b>Remove source files</b>: make clean<br>
 <b>To Uninstall</b>: make uninstall<br>
 
-it accepts two arguments <em>-s</em>, <em>-t</em>
+it accepts two arguments <em>-s</em>, <em>-t</em>.
 <em>-s</em> will give maximum sleep for seconds, <em>-t</em> gives number of threads.
 Example:<br>
 <em>./pid_manager -s=30 -t=6</em>
