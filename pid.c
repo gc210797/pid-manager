@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <pthread.h>
 #include "pid.h"
 
 #define MIN_PID 100
@@ -40,7 +42,7 @@ int allocate_pid()
 	
 	bit = last_set_bit + 1;
 
-	if(cache->pid) {
+	if(cache->pid_bit) {
 		struct pid_cache *t;
 
 		t = cache->next;
@@ -52,8 +54,10 @@ int allocate_pid()
 		cache->pid_bit--;
 	}
 
-	if(bit == (MAX_PID - MIN_PID) + 1)
+	if(bit == (MAX_PID - MIN_PID) + 1) {
+		printf("Pid cannot be allocated wait for other process to exit\n");
 		return 1;
+	}
 	
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
@@ -85,7 +89,7 @@ void release_pid(int pid)
 
 void deallocate_map()
 {
-	void *p, *t;
+	struct pid_cache *p, *t;
 
 	for(p = cache; p != NULL; t = p, p = p->next, free(t));
 	free(map);

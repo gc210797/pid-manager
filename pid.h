@@ -4,6 +4,6 @@
 int allocate_map();
 int allocate_pid();
 void release_pid(int pid);
-int release_map();
+void deallocate_map();
 
 #endif
