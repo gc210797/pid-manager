@@ -23,11 +23,11 @@ void *process_work(void *proc)
 	struct process *p = proc;
 	sleep(p->rnd);
 	printf("I am process with pid %d exiting after sleeping for %d\n", p->p_id, p->rnd);
-	
+
 	pthread_mutex_lock(&lck);
-	
+
 	release_pid(p->p_id);
-	
+
 	if(p->prev == NULL && p->next == NULL) {
 		free(p);
 		procs = NULL;
@@ -111,8 +111,6 @@ int main(int argc, char **argv)
 		printf("Inavlid arguments\n");
 		printf("Continuing with default values\n");
 	}
-
-	//printf("%s %s\n", argv[1], argv[2]);
 
 	for(i = 0; i < no_thread; i++)
 		process_new();
