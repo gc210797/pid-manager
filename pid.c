@@ -39,7 +39,9 @@ int allocate_pid()
 	int bit;
 	int arr_index;
 	int shift;
+	int cached;
 
+	cached = 0;
 	bit = last_set_bit + 1;
 
 	if(cache->pid_bit) {
@@ -52,6 +54,8 @@ int allocate_pid()
 
 		free(t);
 		cache->pid_bit--;
+
+		cached = 1;
 	}
 
 
@@ -63,7 +67,8 @@ int allocate_pid()
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
 	map[arr_index] |= (1 << shift);
-	last_set_bit = bit;
+	if(!cached)
+		last_set_bit = bit;
 
 	return MIN_PID + bit;
 }
