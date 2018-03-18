@@ -29,8 +29,8 @@ int allocate_map()
 		return 0;
 	}
 
-	last_set_bit = 0;
-	
+	last_set_bit = -1;
+
 	return 1;
 }
 
@@ -39,7 +39,7 @@ int allocate_pid()
 	int bit;
 	int arr_index;
 	int shift;
-	
+
 	bit = last_set_bit + 1;
 
 	if(cache->pid_bit) {
@@ -60,9 +60,6 @@ int allocate_pid()
 		return 1;
 	}
 
-	if(bit == (MAX_PID - MIN_PID) + 1)
-		return 1;
-	
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
 	map[arr_index] |= (1 << shift);
@@ -79,7 +76,7 @@ void release_pid(int pid)
 	struct pid_cache *new_entry;
 
 	bit = pid - MIN_PID;
-	
+
 	arr_index = bit / sizeof *map;
 	shift = bit % sizeof *map;
 	map[arr_index] &= ~(1 << shift);
